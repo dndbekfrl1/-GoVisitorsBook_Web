@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+</head>
+<body style="padding: 60px">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <h1 class="text text-center">Go Visitor's Book</h1>
+    <nav class="navbar navbar-light bg-light" style="margin-top: 50px;">
+        <a class="navbar-brand" href="#">최근 방문 기록</a>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <table class="table table-hover table-striped text-center" style="border: 1px solid; margin-top: 30px;">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>상호명</th>
+          <th>갱신 시간</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="data">
+          <td>1</td>
+          <td id="shop name" class="shop"></td>
+          <td id="date">2020-12-03/19:20</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+
+    var walletAddress;
+    var mtSymbol;
+    var stSymbol;
+    var apiKey;
+
+    walletAddress = '0x0fe4ecd313b27c59b8474db05a37ca61015d4e96';
+    mtSymbol='GCC';
+    stSymbol='TE';
+    apiKey='8uPEeTZTqovSTypoFiyYghbw3F4YZd3Xsmh6ji1yr4vNyurhX3uxkoF5QovdHHMn'
+
+    var data =  {
+            "from": "0x0fe4ecd313b27c59b8474db05a37ca61015d4e96",
+            "inputs":{
+                "index":"0"
+            }
+        }
+
+    axios.post(`https://api.luniverse.io/tx/v1.1/transactions/JinaConatractviewLog`,  data,
+        {
+            headers: {
+                'Authorization': 'Bearer ruT3kZfes57KdkL5Trpwy7Fj4nBgHV94QhgVN3mhrRxUQg9rdobFAQQqHUXPSFMq',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((data) => {
+                var item = data.data.data.res
+                var data = item[0];
+                var name = data[0];
+                var pnum = data[1];
+                var shop = data[2];
+                var addr = data[3];
+                var time = data[4]*1000;
+                var date = new Date(time);
+                var img = data[5];
+                var match = data[6];
+
+                $(".shop").html(shop);
+                $("#date").html(date);
+                console.log(name+" "+shop+" "+pnum+" "+addr+" "+time);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    </script>
+</body>
+</html>
+
