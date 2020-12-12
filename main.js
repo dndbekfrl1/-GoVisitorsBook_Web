@@ -3,17 +3,28 @@ const app = express()
 const port = 3000
 var template = require('./template/lib.js');
 
-app.get('/', (req, res) => {
-  console.log(template);
-  res.send(template.template+" "+template.header+" "+template.visit_list);
+
+app.set("view engine", "ejs");
+app.set('views','./view');
+
+app.get('/',function(req,res){
+  res.render('view');
+  //res.send(template.template+" "+template.header+" "+template.visit_list);
 })
+
+
 
 app.get('/search',(req,res)=>{
-  console.log("this is serarch page");
-  res.send("this is search page");
+  console.log(req.query);
+  var searchtype= req.query.searchtype;
+  var term = req.query.term;
+  /*
+  * [V] 번호 검색, 상점 검색 select bar 생성  
+  * [V] 번호 검색, 상점 검색 검색 버튼 상호작용
+  * [] term과 api 통신
+  */
+  res.send(term+" "+searchtype);
 })
-
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

@@ -17,11 +17,19 @@ const template = {
       header: `
       <h1 class="text text-center">Go Visitor's Book</h1>
       <nav class="navbar navbar-light bg-light" style="margin-top: 50px;">
-          <a class="navbar-brand" href="#">최근 방문 기록</a>
-          <form class="form-inline my-2 my-lg-0" type="Post" action="/search" method="post">
-              <input class="form-control mr-sm-2 search" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-          </form>
+
+      <a class="navbar-brand" href="#">최근 방문 기록</a>
+      <form method="get" id="searchForm" class="form-inline my-2 my-lg-0" action="/search">
+      <input class="form-control mr-sm-2 search" type="search" name="term" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <select name="searchtype" form="searchForm" data-style="btn-inverse" class="selectpicker" required>
+        <option value="" selected disabled hidden >선택해주세요.</option>
+        <option value="pnum">번호 검색</option>
+        <option value="shop">상점 검색</option>
+    </select>
+
+
       </nav>
       `,
       visit_list: `
@@ -31,6 +39,7 @@ const template = {
           <th>번호</th>
           <th>상호명</th>
           <th>갱신 시간</th>
+
         </tr>
       </thead>
       <tbody>
