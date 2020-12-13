@@ -7,9 +7,24 @@ app.set("view engine", "ejs");
 app.set("views", "./view");
 
 app.get("/", function (req, res) {
-  res.render("view", { Config });
-  //res.send(template.template+" "+template.header+" "+template.visit_list);
+  res.render("main", { Config });
 });
+
+function intervalFunc() {
+  console.log("Cant stop me now!");
+}
+
+setInterval(intervalFunc, 1500);
+
+var today = new Date();
+var hours = today.getHours();
+var minutes = today.getMinutes();
+console.log("hi");
+console.log(hours + " " + minutes);
+
+if (minutes === 47) {
+  console.log("47><><><>");
+}
 
 app.get("/search", (req, res) => {
   console.log(req.query);
@@ -21,7 +36,11 @@ app.get("/search", (req, res) => {
    * [V] config 작성
    * [] term과 api 통신
    */
-  res.send(term + " " + searchtype);
+  res.render("search", {
+    Config,
+    searchtype,
+    term,
+  });
 });
 
 app.listen(port, () => {
