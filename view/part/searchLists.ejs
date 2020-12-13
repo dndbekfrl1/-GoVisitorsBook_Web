@@ -15,10 +15,23 @@
 <script>
     //[V]html로 res
     //[V]Config파일 유용성있게 재작성
-    //[]매일 자정 14일이 넘어간 데이터는 보여주지 않는다
-    //[]검색 타입에 따른 검색 결과 출력 
+    //[V]검색 타입에 따른 검색 결과 출력 (일단은 구현됨...)
 
-    function deleteAfter2Weeks() { }
+    var searchtype='<%- searchtype %>';
+    var term = '<%- term %>';
+    var query = -1;//검색 쿼리 인덱스 
+
+    switch(searchtype){
+        case 'pnum':
+            query =1;
+            break;
+        case 'shop':
+            query=2;
+            break;
+        default:
+            console.log('not valid');
+    }
+
     //[V]저장된 데이터 수
     //방문 기록 data 출력 
     function createCol(id, shop, date) {
@@ -87,8 +100,9 @@
                     var date = new Date(time);
                     var img = data[5];
                     var match = data[6];
-
-                    createCol(i, shop, date);
+                    if(data[query]===term){
+                        createCol(i, shop, date);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
