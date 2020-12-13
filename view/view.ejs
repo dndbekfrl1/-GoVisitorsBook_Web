@@ -18,6 +18,7 @@
     <% for(var i = 0; i < 10; i++){ %>
       Hello World
      <% } %>
+
     <table class="table table-hover table-striped text-center" style="border: 1px solid; margin-top: 30px;">
       <thead>
         <tr>
@@ -35,48 +36,6 @@
         </tr>
       </tbody>
       </table>
-
-      
-      <script>
-        console.log("hi");
-
-        var data =  {
-            "from": "0x0fe4ecd313b27c59b8474db05a37ca61015d4e96",
-            "inputs":{
-                "index":"0"
-            }
-        }
-
-        axios.post(`https://api.luniverse.io/tx/v1.1/transactions/JinaConatractviewLog`,  data,
-        {
-            headers: {
-                'Authorization': 'Bearer ruT3kZfes57KdkL5Trpwy7Fj4nBgHV94QhgVN3mhrRxUQg9rdobFAQQqHUXPSFMq',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((data) => {
-                var item = data.data.data.res
-                var data = item[0];
-                var name = data[0];
-                var pnum = data[1];
-                var shop = data[2];
-                var addr = data[3];
-                var time = data[4]*1000;
-                var date = new Date(time);
-                var img = data[5];
-                var match = data[6];
-
-                $(".shop").html(shop);
-                $("#date").html(date);
-                console.log(name+" "+shop+" "+pnum+" "+addr+" "+time);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        </script>
-
-
     <footer>
     </footer>
   </body>

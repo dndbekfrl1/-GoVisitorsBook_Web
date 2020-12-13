@@ -1,18 +1,15 @@
 const express = require('express')
 const app = express()
 const port = 3000
-var template = require('./template/lib.js');
-
+const Config = require('./lib/config');
 
 app.set("view engine", "ejs");
 app.set('views','./view');
 
 app.get('/',function(req,res){
-  res.render('view');
+  res.render('view',{Config});
   //res.send(template.template+" "+template.header+" "+template.visit_list);
 })
-
-
 
 app.get('/search',(req,res)=>{
   console.log(req.query);
@@ -21,6 +18,7 @@ app.get('/search',(req,res)=>{
   /*
   * [V] 번호 검색, 상점 검색 select bar 생성  
   * [V] 번호 검색, 상점 검색 검색 버튼 상호작용
+  * [V] config 작성
   * [] term과 api 통신
   */
   res.send(term+" "+searchtype);
