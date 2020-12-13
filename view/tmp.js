@@ -1,7 +1,7 @@
 var Config = require("../lib/config");
 var axios = require("axios");
 
-//[]html로 res
+//[V]html로 res
 //[V]Config파일 유용성있게 재작성
 //[]매일 자정 14일이 넘어간 데이터는 보여주지 않는다
 function deleteAfter2Weeks() {}

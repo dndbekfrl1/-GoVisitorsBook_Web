@@ -1,32 +1,32 @@
-const express = require('express')
-const app = express()
-const port = 3000
-const Config = require('./lib/config');
+const express = require("express");
+const app = express();
+const port = 3000;
+const Config = require("./lib/config");
 
 app.set("view engine", "ejs");
-app.set('views','./view');
+app.set("views", "./view");
 
-app.get('/',function(req,res){
-  res.render('view',{Config});
+app.get("/", function (req, res) {
+  res.render("view", { Config });
   //res.send(template.template+" "+template.header+" "+template.visit_list);
-})
+});
 
-app.get('/search',(req,res)=>{
+app.get("/search", (req, res) => {
   console.log(req.query);
-  var searchtype= req.query.searchtype;
+  var searchtype = req.query.searchtype;
   var term = req.query.term;
   /*
-  * [V] 번호 검색, 상점 검색 select bar 생성  
-  * [V] 번호 검색, 상점 검색 검색 버튼 상호작용
-  * [V] config 작성
-  * [] term과 api 통신
-  */
-  res.send(term+" "+searchtype);
-})
+   * [V] 번호 검색, 상점 검색 select bar 생성
+   * [V] 번호 검색, 상점 검색 검색 버튼 상호작용
+   * [V] config 작성
+   * [] term과 api 통신
+   */
+  res.send(term + " " + searchtype);
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log(`Example app listening at http://localhost:${port}`);
+});
 /*
 const express = require('express') //모듈 로드 
 const app = express()
