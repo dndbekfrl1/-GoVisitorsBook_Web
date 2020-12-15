@@ -49,6 +49,8 @@ app.get("/", function (req, res) {
   res.render("main", { Config });
 });
 
+
+
 app.get("/search", (req, res) => {
   console.log(req.query);
   var searchtype = req.query.searchtype;
@@ -69,3 +71,81 @@ app.get("/search", (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+
+
+app.get("/login", function (req, res) {
+  res.render("login");
+});
+
+
+// 로그인 구현 부분 test 
+
+
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var cookieSession = require('cookie-session');
+var flash = require('connect-flash');
+const { mainModule } = require("process");
+
+app.use(cookieSession({
+  keys: ['p_project'],
+  cookie:{
+    maxAge:1000*60*60 //1시간 후 로그인 만료
+  }
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+//라우터 설정
+
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true}), // 인증 실패 시 401 리턴, {} -> 인증 스트레티지
+  function (req, res) {
+    res.redirect('/');
+  });
+
+  //localStrategy
+
+  passport.use(new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    passReqToCallback: true //인증을 수행하는 인증 함수로 HTTP request를 그대로  전달할지 여부를 결정한다
+  }, function (req, username, password, done) {
+    if(username === 'go-team' && password === 'pproject'){
+      return done(null, {
+        'user_id': username,
+      });
+    }else{
+      return done(false, null)
+    }
+  }));
+
+  //serializeUser
+
+  passport.serializeUser(function(user,done){
+      done(null,user)
+  });
+
+  //deserializeUse
+
+  passport.deserializeUser(function(user, done) {
+      done(null,user);
+  });
+
+  //isAuthenticated()
+
+  var isAuthenticated = function(req, res, next) {
+      if (req.isAuthenticated())
+      return next();
+      res.redirect('/login');
+  };
+
+//로그아웃
+
+ app.get('/logout', function(req, res) {
+     req.logout();
+     res.redirect('/login');
+ });
