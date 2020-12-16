@@ -4,52 +4,70 @@ const port = 3000;
 const Config = require("./lib/config");
 const axios = require("axios");
 
+var expressSession = require("express-session");
+var bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(
+  expressSession({
+    secret: "my key",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
 /**
  * 매일 자정 14일이 넘어간 데이터는 보여주지 않음
  * 주기적으로 현재 시간이 자정인지 확인함
  * 서버단에서 실행됨
  */
-
-// []작동확인
-// var isUpdated = false;
+// [] ajax로 작동확인ㅎ
+// [V]작동확인
 function deleteAfter2Weeks() {
+  console.log("execute!..");
   var today = new Date();
   var hours = today.getHours();
   var minutes = today.getMinutes();
+  const txName = Config.txActionName.setOff.txName;
+  const from = Config.walletAddress.from;
+  const apiKey = Config.dapp.apiKey;
 
   if (hours === 0 && minutes >= 0 && minutes <= 10) {
     var data = {
-      from: `${Config.walletAddress.from}`,
+      from: `${from}`,
     };
     axios
-      .post(
-        `https://api.luniverse.io/tx/v1.1/transactions/${Config.txActionName.setOff.txName}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${Config.chainId}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`https://api.luniverse.io/tx/v1.1/transactions/${txName}`, data, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then(() => {
         console.log("2주 전의 데이터가 삭제되었습니다.");
       })
       .catch((err) => {
+        console.log("error발새어1!!!");
         console.log(err);
       });
   }
 }
-setInterval(deleteAfter2Weeks, 100000);
-
+setInterval(deleteAfter2Weeks, 1000);
 app.set("view engine", "ejs");
 app.set("views", "./view");
 
-app.get("/", function (req, res) {
-  res.render("main", { Config });
+app.get("/require", function (req, res) {
+  res.render("require");
 });
 
-
+app.get("/", function (req, res, next) {
+  if (req.session.userId == undefined) {
+    res.redirect("/require");
+    next();
+  }
+  res.render("main", { Config });
+});
 
 app.get("/search", (req, res) => {
   console.log(req.query);
@@ -59,7 +77,7 @@ app.get("/search", (req, res) => {
    * [V] 번호 검색, 상점 검색 select bar 생성
    * [V] 번호 검색, 상점 검색 검색 버튼 상호작용
    * [V] config 작성
-   * [] term과 api 통신
+   * [V] term과 api 통신
    */
   res.render("search", {
     Config,
@@ -68,84 +86,27 @@ app.get("/search", (req, res) => {
   });
 });
 
+app.post("/login_process", (req, res) => {
+  /**
+   * 로그인, 비밀번호
+   */
+  var user = {
+    username: "go-team",
+    password: "pproject",
+  };
+
+  var uname = req.body.username;
+  var pwd = req.body.password;
+
+  if (uname === user.username && pwd === user.password) {
+    req.session.userId = user.username;
+    res.redirect("/");
+  } else {
+    res.redirect(301, "/require");
+    res.send('<script type="text/javascript">alert("오류발생");</script>');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
-
-
-
-app.get("/login", function (req, res) {
-  res.render("login");
-});
-
-
-// 로그인 구현 부분 test 
-
-
-var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-var cookieSession = require('cookie-session');
-var flash = require('connect-flash');
-const { mainModule } = require("process");
-
-app.use(cookieSession({
-  keys: ['p_project'],
-  cookie:{
-    maxAge:1000*60*60 //1시간 후 로그인 만료
-  }
-}));
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
-
-//라우터 설정
-
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
-
-app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true}), // 인증 실패 시 401 리턴, {} -> 인증 스트레티지
-  function (req, res) {
-    res.redirect('/');
-  });
-
-  //localStrategy
-
-  passport.use(new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password',
-    passReqToCallback: true //인증을 수행하는 인증 함수로 HTTP request를 그대로  전달할지 여부를 결정한다
-  }, function (req, username, password, done) {
-    if(username === 'go-team' && password === 'pproject'){
-      return done(null, {
-        'user_id': username,
-      });
-    }else{
-      return done(false, null)
-    }
-  }));
-
-  //serializeUser
-
-  passport.serializeUser(function(user,done){
-      done(null,user)
-  });
-
-  //deserializeUse
-
-  passport.deserializeUser(function(user, done) {
-      done(null,user);
-  });
-
-  //isAuthenticated()
-
-  var isAuthenticated = function(req, res, next) {
-      if (req.isAuthenticated())
-      return next();
-      res.redirect('/login');
-  };
-
-//로그아웃
-
- app.get('/logout', function(req, res) {
-     req.logout();
-     res.redirect('/login');
- });

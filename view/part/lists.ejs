@@ -29,10 +29,13 @@
         `;
         $("#list").append(data);
     }
+    const from = `<%=Config.walletAddress.from %>`;
+    const apiKey = `<%=Config.dapp.apiKey %>`;
+
     //저장된 데이터 수 
     function getTotalNum() {
         var data = {
-            from: `<%=Config.walletAddress.from %>`,
+            from: `${from}`,
         };
         axios
             .post(
@@ -40,7 +43,7 @@
                 data,
                 {
                     headers: {
-                        Authorization: `Bearer <%=Config.dapp.apiKey%>`,
+                        Authorization: `Bearer ${apiKey}`,
                         "Content-Type": "application/json",
                     },
                 }
@@ -58,7 +61,7 @@
     function getList(total) {
         for (var i = 0; i < total; i++) {
             var data = {
-                from: `<%=Config.walletAddress.from%>`,
+                from: `${from}`,
                 inputs: {
                     index: i,
                 },
@@ -69,7 +72,7 @@
                     data,
                     {
                         headers: {
-                            Authorization: `Bearer <%=Config.dapp.apiKey%>`,
+                            Authorization: `Bearer ${apiKey}`,
                             "Content-Type": "application/json",
                         },
                     }
@@ -85,7 +88,6 @@
                     var date = new Date(time);
                     var img = data[5];
                     var match = data[6];
-
                     createCol(i, shop, date.toLocaleString());
                 })
                 .catch((err) => {
