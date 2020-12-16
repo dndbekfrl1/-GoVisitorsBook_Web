@@ -18,6 +18,17 @@ app.use(
 );
 
 /**
+ * 소켓 - 서버 연결
+ */
+var socket = io("http://150.95.198.45:3000/");
+socket.on("getMessage", function (data) {
+  console.log("socket get message::: " + data.sendMSG);
+});
+socket.on("connect", function (data) {
+  console.log("connect data:::" + data);
+});
+
+/**
  * 매일 자정 14일이 넘어간 데이터는 보여주지 않음
  * 주기적으로 현재 시간이 자정인지 확인함
  * 서버단에서 실행됨
