@@ -3,6 +3,8 @@ const app = express();
 const port = 3000;
 const Config = require("./lib/config");
 const axios = require("axios");
+var http = require("http").Server(app);
+var io = require("socket.io")(http);
 
 var expressSession = require("express-session");
 var bodyParser = require("body-parser");
@@ -16,17 +18,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
-/**
- * 소켓 - 서버 연결
- */
-var socket = io("http://150.95.198.45:3000/");
-socket.on("getMessage", function (data) {
-  console.log("socket get message::: " + data.sendMSG);
-});
-socket.on("connect", function (data) {
-  console.log("connect data:::" + data);
-});
 
 /**
  * 매일 자정 14일이 넘어간 데이터는 보여주지 않음

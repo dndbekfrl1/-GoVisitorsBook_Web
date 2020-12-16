@@ -1,8 +1,15 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
+<script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
+<script>
+    var socket = io();
+    io.socket.emit("getlognum", 0);
+    //서버에서 전달된 데이터가 있을 경우 실행됨
+    io.socket.on("gtlognum return", function (data) {
+        console.log("on 받은 데이터::: " + data);
+    });
+</script>
 <style>
     /* BASIC */
 
@@ -358,8 +365,9 @@
         </form>
 
         <div id="formFooter">
-            <a class="underlineHover" href="#">아이디와 비밀번호는 관리자에게 문의해주세요.</a>
+            <a class="underlineHover" href="#">VPN 접속하지 않으면 명부 열람이 불가능합니다. VPN은 관리자에게 문의하세요.</a>
         </div>
 
     </div>
 </div>
+
