@@ -3,8 +3,6 @@ const app = express();
 const port = 3000;
 const Config = require("./lib/config");
 const axios = require("axios");
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
 
 var expressSession = require("express-session");
 var bodyParser = require("body-parser");
