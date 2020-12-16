@@ -1,9 +1,10 @@
+
 <table class="table table-hover table-striped text-center" style="border: 1px solid; margin-top: 30px;">
     <thead>
         <tr>
             <th>번호</th>
             <th>상호명</th>
-            <th>갱신 시간</th>
+            <th>방문 시간</th>
 
         </tr>
     </thead>
@@ -19,6 +20,8 @@
   
     //[V]저장된 데이터 수
     //방문 기록 data 출력 
+    var index =0;
+
     function createCol(id, shop, date) {
         var data = `
             <tr>
@@ -78,6 +81,7 @@
                     }
                 )
                 .then((data) => {
+                    index+=1;
                     var item = data.data.data.res;
                     var data = item[0];
                     var name = data[0];
@@ -88,7 +92,7 @@
                     var date = new Date(time);
                     var img = data[5];
                     var match = data[6];
-                    createCol(i, shop, date.toLocaleString());
+                    createCol(index, shop, date.toLocaleString());
                 })
                 .catch((err) => {
                     console.log(err);

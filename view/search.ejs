@@ -14,18 +14,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
-
+<style>
+    body{
+      padding: 0 100px;
+    }
+  </style>
 <body>
-    <%- searchtype %>
-    <%- term %> 검색 결과 입니다.
-
-
-  <%- include ('./part/header.ejs') %>
+  <%- include ('./part/searchheader.ejs') %>
   <%- include ('./part/searchLists.ejs')%>
-  </table>
-  <footer>
-    <%- include ('./part/footer.ejs')%>
-  </footer>
 </body>
-
 </html>
