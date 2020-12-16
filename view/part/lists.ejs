@@ -32,22 +32,23 @@
         `;
         $("#list").append(data);
     }
-    const from = `<%=Config.walletAddress.from %>`;
-    const apiKey = `<%=Config.dapp.apiKey %>`;
-    const viewLogNum = `<%=Config.txActionName.viewLogNum.txName`;
+    const from = '<%=Config.walletAddress.from %>';
+    const apiKey = '<%=Config.dapp.apiKey %>';
+    const viewLogNum = '<%=Config.txActionName.viewLogNum.txName %>';
+    const viewLog = '<%=Config.txActionName.viewLog.txName %>';
 
     //저장된 데이터 수 
     function getTotalNum() {
         var data = {
-            from: `0xe9f786c1a77409ca6440d471e5955354982e5486`,
+            from: `${from}`,
         };
         axios
             .post(
-                `https://api.luniverse.io/tx/v1.1/transactions/gtlognum`,
+                `https://api.luniverse.io/tx/v1.1/transactions/${viewLogNum}`,
                 data,
                 {
                     headers: {
-                        Authorization: `Bearer 8uPEeTZTqovSTypoFiyYghbw3F4YZd3Xsmh6ji1yr4vNyurhX3uxkoF5QovdHHMn`,
+                        Authorization: `Bearer ${apiKey}`,
                         "Content-Type": "application/json",
                     },
                 }
@@ -55,7 +56,7 @@
             .then((data) => {
                 var total = data.data.data.res[0];
                 //리스트 함수 호출
-                console.log(total);
+                console.log("총 데이터 수"+total);
                 getList(total);
             })
             .catch((err) => {
@@ -73,7 +74,7 @@
             };
             axios
                 .post(
-                    `https://api.luniverse.io/tx/v1.1/transactions/<%=Config.txActionName.viewLog.txName%>`,
+                    `https://api.luniverse.io/tx/v1.1/transactions/${viewLog}`,
                     data,
                     {
                         headers: {

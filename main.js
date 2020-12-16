@@ -64,6 +64,7 @@ app.get("/require", function (req, res) {
 });
 
 app.get("/", function (req, res, next) {
+  console.log(req.session.userId);
   if (req.session.userId == undefined) {
     res.redirect("/require");
     next();
